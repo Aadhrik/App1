@@ -4,7 +4,7 @@ import Charts
 
 struct TrendsView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query(sort: \DailyLog.date, order: .descending) private var allLogs: [DailyLog]
+    @Query(sort: \DailyLog.date, order: .reverse) private var allLogs: [DailyLog]
     @Query private var allTargets: [UserTargets]
 
     @State private var healthKit = HealthKitManager.shared
@@ -359,7 +359,7 @@ struct TrendsView: View {
 
     private func weeklyGymCounts() -> [(weekStart: Date, count: Int)] {
         let sorted = allLogs.sorted { $0.date < $1.date }
-        guard let firstDate = sorted.first?.date else { return [] }
+        guard !sorted.isEmpty else { return [] }
 
         var weekMap: [Date: Int] = [:]
         for log in sorted {
